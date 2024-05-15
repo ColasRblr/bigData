@@ -39,7 +39,8 @@ button[type="submit"] {
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    padding: 20px;
+    padding: 10px;
+    margin: 20px
 }
 
 .book h2 {
