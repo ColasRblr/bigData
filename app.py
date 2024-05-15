@@ -22,6 +22,14 @@ def analyser_sentiment(occurrence_file):
     score = sia.polarity_scores(text)
     return score
 
+def determiner_sentiment(compound_score):
+    if compound_score > 0.05:
+        return "Positif"
+    elif -0.05 <= compound_score <= 0.05:
+        return "Neutre"
+    else:
+        return "Négatif"
+    
 @app.route('/')
 def accueil():
     books_directory = 'books'
@@ -46,7 +54,9 @@ def accueil():
                 sentiment_score = analyser_sentiment(mots_occurrence_file)
                 logger.debug("Score de sentiment analysé pour le livre %s : %s", book_directory, sentiment_score)
 
+                sentiment = determiner_sentiment(sentiment_score['compound'])
                 nuage_mots_file = generer_nuage_mots(book_directory, mots_occurrence_file)
+
                 logger.debug("Nuage de mots généré : %s", nuage_mots_file)
 
                 mots_poids_file = os.path.join(books_directory, book_directory, 'mots_poids.json')
@@ -59,6 +69,7 @@ def accueil():
 
                 book_info = {
                     'title': book_title,
+                    'sentiment': sentiment,
                     'nuage_mots_file': nuage_mots_file,
                     'diagramme_tendance_file': None
                 }
@@ -114,17 +125,22 @@ def upload_file():
             book_title = filename.split('.')[0]  
             nuage_mots_file = generer_nuage_mots(book_title, file_path)
             diagramme_tendance_file = generer_graphique_tendance(book_title, mots_poids_file)
+            
+            sentiment = determiner_sentiment(sentiment_score['compound'])
                 
             existing_book = next((book for book in books if book['title'] == book_title), None)
             if existing_book:
                 existing_book['nuage_mots_file'] = nuage_mots_file
                 existing_book['diagramme_tendance_file'] = diagramme_tendance_file
+                existing_book['sentiment'] = sentiment  # Ajouter le sentiment ici
             else:
                 books.append({
                     'title': book_title,
                     'nuage_mots_file': nuage_mots_file,
-                    'diagramme_tendance_file': diagramme_tendance_file
+                    'diagramme_tendance_file': diagramme_tendance_file,
+                    'sentiment': sentiment  # Ajouter le sentiment ici
                 })
+                
                 
             flash('File uploaded and processed successfully')
             return redirect('/')
