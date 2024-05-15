@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/detailsStyle.css">
+    <title>Détails du Livre {{ book }}</title>
+</head>
+<body>
+    <h1>Détails du livre {{ book }}</h1>
+
+    <!-- Affichage du nuage de mots -->
+    <h2>Nuage de mots</h2>
+    <img src="/{{ nuage_mots_file }}" alt="Nuage de Mots">
+
+    <!-- Affichage du graphique de tendance -->
+    <h2>Graphique de tendance</h2>
+    <img src="/{{ diagramme_tendance_file }}" alt="Diagramme de Tendance">
+</body>
+</html>

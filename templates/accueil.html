@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/accueilStyle.css">
+    <title>Accueil</title>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data" action="/upload">
+        <label>Vous pouvez ajouter un texte</label>
+        <input type="file" name="file" accept=".txt">
+        <button type="submit">Ajouter</button>
+    </form>
+    <div> <h1>Liste des livres</h1></div>
+    <div class="books">
+        {% for book in books %}
+        <div class="book">
+            <h2>{{ book.title }}</h2>
+            <a href="{{ url_for('details', book=book.title) }}">Voir les détails</a>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
